@@ -42,7 +42,7 @@ class _PatientLabTestAvailabilityState
           final test = labTestsDB[index];
           final bool doctorSuggested =
           doctorSuggestedTests.contains(test["name"]);
-          final bool canBook = test["available"] && doctorSuggested;
+          final bool canBook = test["available"];
 
           return Container(
             margin: const EdgeInsets.only(bottom: 12),

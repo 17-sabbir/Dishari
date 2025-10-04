@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spl2/src/home_page.dart';
+import 'package:spl2/src/universal_login.dart';
 import 'package:spl2/src/admin/admin_dashboard.dart';
 import 'package:spl2/src/doctor/doctor_dashboard.dart';
 import 'package:spl2/src/doctor/prescription_page.dart';
@@ -57,6 +57,11 @@ class MyApp extends StatelessWidget {
         '/patient-ambulance-staff': (context) => const PatientAmbulanceStaff(),
         '/patient-signup': (context) => const PatientSignupPage(),
       },
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) => const Scaffold(
+        body: Center(child: Text("Page not found"),),
+    ),
+      ),
     );
   }
 }

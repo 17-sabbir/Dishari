@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:spl2/src/universal_login.dart';
 
 class PatientProfilePage extends StatefulWidget {
   const PatientProfilePage({super.key});
@@ -10,27 +11,74 @@ class PatientProfilePage extends StatefulWidget {
 }
 
 class _PatientProfilePageState extends State<PatientProfilePage> {
+  // Initial values
+  final String initialName = "Md Sabbir Ahamed";
+  final String initialEmail = "sabbir2517@student.nstu.edu.bd";
+  final String initialPhone = "+8801********";
+  final String initialBloodGroup = "B+";
+  final String initialAllergies = "Dust, Dal";
+  final String initialDepartment = "Computer Science & Engineering";
+  final String initialSession = "2022-2023";
+  final String initialEmergencyContact = "+8801712345678";
+
   // Controllers
-  final TextEditingController _nameController = TextEditingController(
-    text: "Md Sabbir Ahamed",
-  );
-  final TextEditingController _emailController = TextEditingController(
-    text: "ASH001M@student.nstu.edu.bd",
-  );
-  final TextEditingController _phoneController = TextEditingController(
-    text: "+8801********",
-  );
-  final TextEditingController _bloodGroupController = TextEditingController(
-    text: "B+",
-  );
-  final TextEditingController _allergiesController = TextEditingController(
-    text: "Dust, Dal",
-  );
+  late final TextEditingController _nameController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _IDController;
+  late final TextEditingController _phoneController;
+  late final TextEditingController _bloodGroupController;
+  late final TextEditingController _allergiesController;
+  late final TextEditingController _departmentController;
+  late final TextEditingController _sessionController;
 
   // Profile image
   File? _profileImage;
-
   final ImagePicker _picker = ImagePicker();
+
+  // Track if changes made
+  bool _isChanged = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: initialName);
+    _emailController = TextEditingController(text: initialEmail);
+    _IDController = TextEditingController(text: "ASH2225005M");
+    _phoneController = TextEditingController(text: initialPhone);
+    _bloodGroupController = TextEditingController(text: initialBloodGroup);
+    _allergiesController = TextEditingController(text: initialAllergies);
+    _departmentController = TextEditingController(text: initialDepartment);
+    _sessionController = TextEditingController(text: initialSession);
+
+
+    // Listeners to track changes
+    _nameController.addListener(_checkChanges);
+    _emailController.addListener(_checkChanges);
+    _IDController.addListener(_checkChanges);
+    _phoneController.addListener(_checkChanges);
+    _bloodGroupController.addListener(_checkChanges);
+    _allergiesController.addListener(_checkChanges);
+    _departmentController.addListener(_checkChanges);
+    _sessionController.addListener(_checkChanges);
+
+  }
+
+  void _checkChanges() {
+    final changed = _nameController.text != initialName ||
+        _emailController.text != initialEmail ||
+        _phoneController.text != initialPhone ||
+        _bloodGroupController.text != initialBloodGroup ||
+        _allergiesController.text != initialAllergies ||
+        _departmentController.text != initialDepartment ||
+        _sessionController.text != initialSession ||
+        _profileImage != null;
+
+    if (changed != _isChanged) {
+      setState(() {
+        _isChanged = changed;
+      });
+    }
+  }
 
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -38,6 +86,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
       setState(() {
         _profileImage = File(image.path);
       });
+      _checkChanges();
     }
   }
 
@@ -50,9 +99,20 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text("My Profile"),
-        // backgroundColor: Colors.blue.shade700,
         foregroundColor: Colors.blue,
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+                    (Route<dynamic> route) => false,
+              );
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -69,15 +129,9 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                   CircleAvatar(
                     radius: 60,
                     backgroundColor: Colors.grey[300],
-                    backgroundImage: _profileImage != null
-                        ? FileImage(_profileImage!)
-                        : null,
+                    backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
                     child: _profileImage == null
-                        ? const Icon(
-                            Icons.person,
-                            size: 60,
-                            color: Colors.black54,
-                          )
+                        ? const Icon(Icons.person, size: 60, color: Colors.black54)
                         : null,
                   ),
                   Positioned(
@@ -92,11 +146,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                         padding: const EdgeInsets.all(6),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 20,
-                        ),
+                        child: const Icon(Icons.edit, color: Colors.white, size: 20),
                       ),
                     ),
                   ),
@@ -122,13 +172,31 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
 
               const SizedBox(height: 15),
 
-              // Email/ID (read-only)
+              // Email (read-only)
               TextField(
                 controller: _emailController,
                 readOnly: true,
                 decoration: InputDecoration(
-                  labelText: "University Email/ID",
+                  labelText: "Email",
                   prefixIcon: const Icon(Icons.mail, color: Colors.blue),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              // University ID (read-only)
+              TextField(
+                controller: _IDController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: "University ID",
+                  prefixIcon: const Icon(Icons.badge, color: Colors.blue),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -180,10 +248,43 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                 controller: _allergiesController,
                 decoration: InputDecoration(
                   labelText: "Allergies (if any)",
-                  prefixIcon: const Icon(
-                    Icons.health_and_safety,
-                    color: Colors.blue,
+                  prefixIcon: const Icon(Icons.health_and_safety, color: Colors.blue),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              // Department (read-only)
+              TextField(
+                controller: _departmentController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: "Department",
+                  prefixIcon: const Icon(Icons.school, color: Colors.blue),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              // Session (read-only)
+              TextField(
+                controller: _sessionController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: "Session",
+                  prefixIcon: const Icon(Icons.calendar_month, color: Colors.blue),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -195,18 +296,27 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
 
               const SizedBox(height: 30),
 
-              // Save button
-              // Save button
+              // Save Changes Button
               SizedBox(
-                width:
-                    MediaQuery.of(context).size.width *
-                    0.6, // 60% of screen width
+                width: MediaQuery.of(context).size.width * 0.6,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                  },
+                  onPressed: _isChanged
+                      ? () {
+                    // TODO: Save updated profile
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Changes Saved!"),
+                      ),
+                    );
+                    setState(() {
+                      _isChanged = false;
+                    });
+                  }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue.shade700,
+                    disabledBackgroundColor: Colors.grey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -221,6 +331,8 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                   ),
                 ),
               ),
+
+              const SizedBox(height: 30),
             ],
           ),
         ),

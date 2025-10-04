@@ -18,8 +18,9 @@ class PatientDashboard extends StatelessWidget {
     double responsiveWidth(double w) => width * w / 375;
     double responsiveHeight(double h) => height * h / 812;
 
-    // Dummy notifications list
+    // Replace dummy notifications with dynamic data (example)
     final List<Map<String, dynamic>> notifications = [
+      // This should be fetched from backend or local storage
       {
         "icon": Icons.medical_services,
         "title": "Prescription Reminder",
@@ -139,7 +140,7 @@ class PatientDashboard extends StatelessWidget {
                     ),
                     SizedBox(height: responsiveHeight(4)),
                     const Text(
-                      "Patient ID: ASH2225005M",
+                      "Your Student ID: ASH2225005M",
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.black54,
