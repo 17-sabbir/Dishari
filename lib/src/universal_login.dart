@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 50),
-
                 // Icon with shadow
                 Container(
                   decoration: BoxDecoration(
@@ -58,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.blue.withOpacity(0.3),
+                        color: Colors.blue.withValues(alpha: 0.3),
                         blurRadius: 12,
                         offset: const Offset(0, 6),
                       ),
@@ -73,7 +72,6 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 const SizedBox(height: 20),
-
                 // Title
                 Text(
                   'Dishari',
@@ -84,6 +82,7 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2,
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
 
@@ -149,24 +148,42 @@ class _HomePageState extends State<HomePage> {
                       if (_formKey.currentState!.validate()) {
                       final input = _idController.text.trim().toLowerCase();
 
-                      if (input == 'admin') {
+                      if (input == 'admin@gmail.com') {
                         Navigator.pushNamed(context, '/admin-dashboard');
-                      } else if (input == 'patient') {
+                      } else if (input == 'patient@gmail.com') {
                         Navigator.pushNamed(context, '/patient-dashboard');
-                      } else if (input == 'dispenser') {
+                      } else if (input == 'dispenser@gmail.com') {
                         Navigator.pushNamed(context, '/dispenser-dashboard');
-                      } else if (input == 'doctor') {
+                      } else if (input == 'doctor@gmail.com') {
                         Navigator.pushNamed(context, '/doctor-dashboard');
-                      } else if (input == 'lab') {
+                      } else if (input == 'lab@gmail.com') {
                         Navigator.pushNamed(context, '/lab-dashboard');
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please enter admin/doctor/lab/patient/dispenser',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Invalid Input',textAlign: TextAlign.center,),
+
+                              content: const Text(
+                                'Please enter (admin/doctor/lab/patient/\ndispenser)@gmail.com and any password',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // popup বন্ধ করবে
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
                         );
+
                       }
                     }},
                     style: ElevatedButton.styleFrom(

@@ -160,7 +160,7 @@ class _PatientRecordsPageState extends State<PatientRecordsPage> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        elevation: 2,
+        iconTheme: const IconThemeData(color: Colors.blueAccent),
       ),
       body: Column(
         children: [

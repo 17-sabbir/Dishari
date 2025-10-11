@@ -221,11 +221,9 @@ class _InventoryManagementState extends State<InventoryManagement> {
   }
 
   void _showAddMedicineDialog() async {
-    // Dummy implementation for Add Medicine Dialog
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Add Medicine Dialog functionality is pending implementation.")));
   }
 
-  // --- Main Widget Build ---
 
   @override
   Widget build(BuildContext context) {

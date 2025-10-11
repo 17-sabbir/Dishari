@@ -1,23 +1,49 @@
-// this is the lab tester profile page
-
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class LabTesterProfile extends StatefulWidget {
   const LabTesterProfile({super.key});
+
   @override
   State<LabTesterProfile> createState() => _LabTesterProfileState();
 }
+
 class _LabTesterProfileState extends State<LabTesterProfile> {
-  String name = " Kamal Hosen";
+  String name = "Kamal Hosen";
   String email = "kamlhosen@nstu.edu.bd";
   String phone = "+880 1712 345678";
   String department = "Pathology Laboratory";
   String joinedDate = "January 15, 2022";
 
+  File? _profileImage;
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _oldPassword = TextEditingController();
   final TextEditingController _newPassword = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
+
+  Future<void> _pickProfileImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 500,
+      maxHeight: 500,
+      imageQuality: 80,
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Profile picture updated"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
 
   void _showChangePasswordDialog() {
     showDialog(
@@ -119,21 +145,25 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
     }
   }
 
+  void _logout() {
+    // Implement your logout logic here
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Logged out successfully"),
+        backgroundColor: Colors.blue,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text("My Profile",style: TextStyle(color: Colors.blueAccent),),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Profile Card
+            // Profile Card with Profile Image & Edit Icon
             Card(
               elevation: 2,
               shape: RoundedRectangleBorder(
@@ -143,10 +173,33 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.blue,
-                      child: Icon(Icons.science, size: 50, color: Colors.white),
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.blue,
+                          backgroundImage: _profileImage != null
+                              ? FileImage(_profileImage!)
+                              : null,
+                          child: _profileImage == null
+                              ? const Icon(Icons.person,
+                              size: 50, color: Colors.white)
+                              : null,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _pickProfileImage,
+                            child: CircleAvatar(
+                              radius: 16,
+                              backgroundColor: Colors.white,
+                              child: const Icon(Icons.edit,
+                                  size: 18, color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -164,16 +217,105 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 16),
-                    _buildProfileInfoRow(Icons.email, "Email", email),
+
+                    // Email Row
+                    Row(
+                      children: [
+                        const Icon(Icons.email, size: 20, color: Colors.grey),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Email",
+                              style:
+                              TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              email,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 12),
-                    _buildProfileInfoRow(Icons.phone, "Phone", phone),
+
+                    // Phone Row
+                    Row(
+                      children: [
+                        const Icon(Icons.phone, size: 20, color: Colors.grey),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Phone",
+                              style:
+                              TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              phone,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 12),
-                    _buildProfileInfoRow(Icons.work, "Department", department),
+
+                    // Department Row
+                    Row(
+                      children: [
+                        const Icon(Icons.work, size: 20, color: Colors.grey),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Department",
+                              style:
+                              TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              department,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 12),
-                    _buildProfileInfoRow(
-                      Icons.calendar_today,
-                      "Joined",
-                      joinedDate,
+
+                    // Joined Date Row
+                    Row(
+                      children: [
+                        const Icon(Icons.calendar_today,
+                            size: 20, color: Colors.grey),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Joined",
+                              style:
+                              TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              joinedDate,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -183,12 +325,15 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
 
             // Change Password Button
             SizedBox(
-              width: double.infinity,
+              width:MediaQuery.of(context).size.width * 0.6,
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: _showChangePasswordDialog,
                 icon: const Icon(Icons.lock_reset),
-                label: const Text("Change Password"),
+                label: const Text(
+                  "Change Password",
+                  style: TextStyle(color: Colors.white),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue.shade700,
                   shape: RoundedRectangleBorder(
@@ -197,67 +342,30 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
-            // Additional Options
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(
-                      Icons.notifications,
-                      color: Colors.blue,
-                    ),
-                    title: const Text("Notification Settings"),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {
-                      // Navigate to notification settings
-                    },
+            // Logout Button
+            SizedBox(
+              width:MediaQuery.of(context).size.width * 0.6,
+              height: 50,
+              child: ElevatedButton.icon(
+                onPressed: _logout,
+                icon: const Icon(Icons.logout, color: Colors.white),
+                label: const Text(
+                  "Logout",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.logout, color: Colors.red),
-                    title: const Text(
-                      "Logout",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    onTap: () {
-                      // Implement logout
-                    },
-                  ),
-                ],
+                ),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildProfileInfoRow(IconData icon, String label, String value) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: Colors.grey),
-        const SizedBox(width: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

@@ -241,10 +241,7 @@ class PatientDashboard extends StatelessWidget {
                         icon: Icons.person,
                         label: "Profile",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const PatientProfilePage()),
-                          );
+                          Navigator.pushNamed(context, '/patient-profile');
                         },
                         width: itemWidth,
                       ),
@@ -252,10 +249,7 @@ class PatientDashboard extends StatelessWidget {
                         icon: Icons.medication,
                         label: "Prescriptions",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const PatientPrescriptions()),
-                          );
+                          Navigator.pushNamed(context, '/patient-prescriptions');
                         },
                         width: itemWidth,
                       ),
@@ -263,10 +257,7 @@ class PatientDashboard extends StatelessWidget {
                         icon: Icons.description,
                         label: "My Reports",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const PatientReports()),
-                          );
+                          Navigator.pushNamed(context, '/patient-reports');
                         },
                         width: itemWidth,
                       ),
@@ -274,10 +265,7 @@ class PatientDashboard extends StatelessWidget {
                         icon: Icons.upload_file,
                         label: "Upload Results",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const PatientReportUpload()),
-                          );
+                          Navigator.pushNamed(context, '/patient-report-upload');
                         },
                         width: itemWidth,
                         startColor: Colors.blueAccent,
@@ -287,10 +275,7 @@ class PatientDashboard extends StatelessWidget {
                         icon: Icons.science_outlined,
                         label: "Lab Test Availability",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const PatientLabTestAvailability()),
-                          );
+                          Navigator.pushNamed(context, '/patient-lab-availability');
                         },
                         width: itemWidth,
                         startColor: Colors.tealAccent,
@@ -300,10 +285,7 @@ class PatientDashboard extends StatelessWidget {
                         icon: Icons.local_hospital,
                         label: "See Ambulance & Staff",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const PatientAmbulanceStaff()),
-                          );
+                          Navigator.pushNamed(context, '/patient-ambulance-staff');
                         },
                         width: itemWidth,
                         startColor: Colors.orangeAccent,

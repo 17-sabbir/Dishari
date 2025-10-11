@@ -1,16 +1,16 @@
-// lab_staff_panel.dart
+// lab_test_panel.dart
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'lab_booking_entry.dart';
 
-class LabStaffPanel extends StatefulWidget {
-  const LabStaffPanel({super.key});
+class LabTestPanel extends StatefulWidget {
+  const LabTestPanel({super.key});
 
   @override
-  State<LabStaffPanel> createState() => _LabStaffPanelState();
+  State<LabTestPanel> createState() => _LabTestPanelState();
 }
 
-class _LabStaffPanelState extends State<LabStaffPanel> {
+class _LabTestPanelState extends State<LabTestPanel> {
   final List<Map<String, dynamic>> _bookedTests = [
     {
       "bookingId": "BK004",
@@ -58,7 +58,7 @@ class _LabStaffPanelState extends State<LabStaffPanel> {
     },
     {
       "bookingId": "BK005",
-      "patient": "John Smith",
+      "patient": "Barsha Islam",
       "patientId": "STU2024002",
       "patientType": "student",
       "test": "Blood Glucose",
@@ -69,7 +69,7 @@ class _LabStaffPanelState extends State<LabStaffPanel> {
     },
     {
       "bookingId": "BK006",
-      "patient": "Sarah Johnson",
+      "patient": "Habiba Sultana",
       "patientId": "EMP456",
       "patientType": "employee",
       "test": "CBC",
@@ -141,17 +141,19 @@ class _LabStaffPanelState extends State<LabStaffPanel> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Lab Staff Panel'),
-          backgroundColor: Colors.blue.shade700,
-          foregroundColor: Colors.white,
-          bottom: const TabBar(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(55),
+          child: Container(
+           color: Colors.white,
+          child: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.list_alt), text: 'Bookings'),
               Tab(icon: Icon(Icons.science_outlined), text: 'Result/Sample Action'),
             ],
+            labelColor: Colors.blue,
+            unselectedLabelColor: Colors.black,
           ),
-        ),
+        ),),
         body: Column(
           children: [
             // Inline Search and Filter Bar

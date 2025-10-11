@@ -10,26 +10,25 @@ class UserManagement extends StatefulWidget {
 class _UserManagementState extends State<UserManagement> {
   String selectedCategory = "Doctor";
   final TextEditingController searchController = TextEditingController();
-  final Color primaryColor = const Color(0xFF00796B); // Deep Teal
+  final Color primaryColor = const Color(0xFF00796B);
 
-  // Dummy data: Roles as per SRS (Doctor, Dispenser, Lab Staff, Patient, Admin)
-  final Map<String, List<Map<String, String>>> _allUsers = {
+  final Map<String, List<Map<String, dynamic>>> _allUsers = {
     "Doctor": [
-      {"name": "Dr. Amina Patel", "email": "amina@nstumedical.com", "role": "Doctor", "icon": "local_hospital"},
-      {"name": "Dr. Hasan Khan", "email": "hasan@nstumedical.com", "role": "Doctor", "icon": "local_hospital"},
+      {"name": "Dr. Wakil Ahamed", "email": "wakil@nstumedical.com", "role": "Doctor", "icon": "local_hospital", "active": true},
+      {"name": "Dr. Hasan Khan", "email": "hasan@nstumedical.com", "role": "Doctor", "icon": "local_hospital", "active": true},
     ],
     "Dispenser": [
-      {"name": "Dispenser Sumon", "email": "sumon@pharmacy.com", "role": "Dispenser", "icon": "medication"},
+      {"name": "Dispenser Sumon", "email": "sumon@pharmacy.com", "role": "Dispenser", "icon": "medication", "active": true},
     ],
     "Lab Staff": [
-      {"name": "Lab Tech Lima", "email": "lima@lab.com", "role": "Lab Staff", "icon": "science"},
+      {"name": "Lab Tech Lima", "email": "lima@lab.com", "role": "Lab Staff", "icon": "science", "active": true},
     ],
     "Patient": [
-      {"name": "Mina Akter", "email": "mina@gmail.com", "role": "Patient", "icon": "person"},
-      {"name": "Arif Islam", "email": "arif@gmail.com", "role": "Patient", "icon": "person"},
+      {"name": "Mina Akter", "email": "mina@gmail.com", "role": "Patient", "icon": "person", "active": true},
+      {"name": "Arif Islam", "email": "arif@gmail.com", "role": "Patient", "icon": "person", "active": false},
     ],
     "Admin": [
-      {"name": "Admin User", "email": "admin@healthcare.org", "role": "Admin", "icon": "admin_panel_settings"},
+      {"name": "Admin User", "email": "admin@healthcare.org", "role": "Admin", "icon": "admin_panel_settings", "active": true},
     ],
   };
 
@@ -43,7 +42,6 @@ class _UserManagementState extends State<UserManagement> {
     }
   }
 
-  // Improved UI: Filter Chips for selection
   Widget _buildCategorySelector() {
     final categories = _allUsers.keys.toList();
     return SingleChildScrollView(
@@ -63,11 +61,7 @@ class _UserManagementState extends State<UserManagement> {
                 fontWeight: selectedCategory == category ? FontWeight.bold : FontWeight.normal,
               ),
               onSelected: (selected) {
-                if (selected) {
-                  setState(() {
-                    selectedCategory = category;
-                  });
-                }
+                if (selected) setState(() { selectedCategory = category; });
               },
             ),
           );
@@ -82,8 +76,8 @@ class _UserManagementState extends State<UserManagement> {
         .where((user) =>
     searchController.text.isEmpty ||
         user["email"]!.toLowerCase().contains(searchController.text.toLowerCase()) ||
-        user["name"]!.toLowerCase().contains(searchController.text.toLowerCase()))
-        .toList();
+        user["name"]!.toLowerCase().contains(searchController.text.toLowerCase())
+    ).toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -96,16 +90,10 @@ class _UserManagementState extends State<UserManagement> {
               decoration: InputDecoration(
                 labelText: "Search User by Name or Email",
                 prefixIcon: const Icon(Icons.search, color: Color(0xFF00796B)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                filled: true, fillColor: Colors.grey[100],
               ),
-              onChanged: (value) {
-                setState(() {});
-              },
+              onChanged: (value) { setState(() {}); },
             ),
             const SizedBox(height: 10),
             _buildCategorySelector(),
@@ -126,21 +114,43 @@ class _UserManagementState extends State<UserManagement> {
                         backgroundColor: primaryColor.withOpacity(0.1),
                         child: Icon(_getIcon(user['icon']!), color: primaryColor),
                       ),
-                      title: Text(
-                        user['name']!,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      title: Text(user['name']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("${user['email']!}\nRole: ${user['role']!}", style: const TextStyle(color: Colors.black54)),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Icon(user['active'] ? Icons.check_circle : Icons.cancel, color: user['active'] ? Colors.green : Colors.red, size: 16),
+                              const SizedBox(width: 4),
+                              Text(user['active'] ? "Active" : "Inactive", style: TextStyle(color: user['active'] ? Colors.green : Colors.red, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ],
                       ),
-                      subtitle: Text(
-                        "${user['email']!}\nRole: ${user['role']!}",
-                        style: const TextStyle(color: Colors.black54),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () {
-                          // Implement user modification logic here (dummy)
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Editing ${user['name']}...")));
+                      trailing: PopupMenuButton<String>(
+                        icon: const Icon(Icons.more_vert, color: Colors.blue),
+                        onSelected: (value) {
+                          if (value == 'toggle') {
+                            setState(() { user['active'] = !user['active']; });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(user['active'] ? "${user['name']} activated" : "${user['name']} deactivated")),
+                            );
+                          }
                         },
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 'toggle',
+                            child: Row(
+                              children: [
+                                Icon(user['active'] ? Icons.lock_open : Icons.lock, color: user['active'] ? Colors.green : Colors.red),
+                                const SizedBox(width: 8),
+                                Text(user['active'] ? "Deactivate" : "Activate"),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       isThreeLine: true,
                     ),
@@ -163,20 +173,17 @@ class _UserManagementState extends State<UserManagement> {
 
   void _showAddUserDialog(BuildContext context) {
     final passwordController = TextEditingController();
+    final nameController = TextEditingController();
+    final emailController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) {
-        String role = "Doctor"; // Default role
-        final nameController = TextEditingController();
-        final emailController = TextEditingController();
-
-        // Validation state variables
+        String role = "Doctor";
         bool _isNameValid = true;
         bool _isEmailValid = true;
         bool _isPasswordValid = true;
 
-        // Use StatefulBuilder to manage validation state locally
         return StatefulBuilder(
           builder: (context, setStateDialog) {
             return AlertDialog(
@@ -187,27 +194,16 @@ class _UserManagementState extends State<UserManagement> {
                   children: [
                     TextField(
                       controller: nameController,
-                      decoration: InputDecoration(
-                        labelText: "Full Name",
-                        errorText: _isNameValid ? null : "Name is required", // Error feedback
-                      ),
+                      decoration: InputDecoration(labelText: "Full Name", errorText: _isNameValid ? null : "Name is required"),
                     ),
                     TextField(
                       controller: emailController,
-                      decoration: InputDecoration(
-                        labelText: "Email/ID",
-                        errorText: _isEmailValid ? null : "Email/ID is required", // Error feedback
-                      ),
+                      decoration: InputDecoration(labelText: "Email/ID", errorText: _isEmailValid ? null : "Email/ID is required"),
                     ),
-                    // Initial Password Field
                     TextField(
                       controller: passwordController,
-                      obscureText: true, // Hides the password input
-                      decoration: InputDecoration(
-                        labelText: "Initial Password",
-                        prefixIcon: const Icon(Icons.lock),
-                        errorText: _isPasswordValid ? null : "Password is required", // Error feedback
-                      ),
+                      obscureText: true,
+                      decoration: InputDecoration(labelText: "Initial Password", prefixIcon: const Icon(Icons.lock), errorText: _isPasswordValid ? null : "Password is required"),
                     ),
                     DropdownButtonFormField<String>(
                       value: role,
@@ -218,73 +214,34 @@ class _UserManagementState extends State<UserManagement> {
                         DropdownMenuItem(value: "Patient", child: Text("Patient")),
                         DropdownMenuItem(value: "Admin", child: Text("Admin")),
                       ],
-                      onChanged: (value) {
-                        setStateDialog(() { // Use setStateDialog to update role locally
-                          role = value!;
-                        });
-                      },
+                      onChanged: (value) { setStateDialog(() { role = value!; }); },
                       decoration: const InputDecoration(labelText: "Select Role"),
                     ),
                   ],
                 ),
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("Cancel"),
-                ),
+                TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
                 ElevatedButton(
                   onPressed: () {
-                    // --- Validation Logic ---
                     bool isValid = true;
+                    if (nameController.text.isEmpty) { isValid = false; setStateDialog(() { _isNameValid = false; }); } else { setStateDialog(() { _isNameValid = true; }); }
+                    if (emailController.text.isEmpty) { isValid = false; setStateDialog(() { _isEmailValid = false; }); } else { setStateDialog(() { _isEmailValid = true; }); }
+                    if (passwordController.text.isEmpty) { isValid = false; setStateDialog(() { _isPasswordValid = false; }); } else { setStateDialog(() { _isPasswordValid = true; }); }
+                    if (!isValid) return;
 
-                    // Reset and Check Name
-                    if (nameController.text.isEmpty) {
-                      isValid = false;
-                      setStateDialog(() { _isNameValid = false; });
-                    } else {
-                      setStateDialog(() { _isNameValid = true; });
-                    }
-
-                    // Reset and Check Email
-                    if (emailController.text.isEmpty) {
-                      isValid = false;
-                      setStateDialog(() { _isEmailValid = false; });
-                    } else {
-                      setStateDialog(() { _isEmailValid = true; });
-                    }
-
-                    // Reset and Check Password
-                    if (passwordController.text.isEmpty) {
-                      isValid = false;
-                      setStateDialog(() { _isPasswordValid = false; });
-                    } else {
-                      setStateDialog(() { _isPasswordValid = true; });
-                    }
-
-                    // If validation fails, return early. Error text will show automatically.
-                    if (!isValid) {
-                      return;
-                    }
-                    // --- End Validation Logic ---
-
-
-                    // If valid, proceed with creation (using the main setState for UI update)
                     setState(() {
                       _allUsers[role]!.add({
                         "name": nameController.text,
                         "email": emailController.text,
                         "role": role,
                         "icon": role == "Doctor" ? "local_hospital" : (role == "Admin" ? "admin_panel_settings" : "person"),
+                        "active": true,
                       });
                     });
 
                     Navigator.pop(context);
-
-                    // Success message still shows via SnackBar
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("$role ${nameController.text} created successfully with initial password: ${passwordController.text}")),
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$role ${nameController.text} created successfully")));
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
                   child: const Text("Create", style: TextStyle(color: Colors.white)),

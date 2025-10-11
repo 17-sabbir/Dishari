@@ -81,16 +81,17 @@ class _LabTestBookingState extends State<LabTestBooking> {
   }
 
   void _confirmBooking() {
-    // In a real app, this would send data to a backend system (e.g., Firestore)
-    // and navigate to a payment confirmation or summary screen.
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
             'Booking successful! Total ৳${_totalAmount.toStringAsFixed(2)} booked for ${widget.patientId}.'),
       ),
     );
-    // Optionally navigate back to the Lab Staff Panel or Home
-    // Navigator.popUntil(context, (route) => route.isFirst);
+
+    Navigator.pop(context, true);
+    Navigator.pop(context, true);
+
   }
 
   @override
@@ -98,8 +99,9 @@ class _LabTestBookingState extends State<LabTestBooking> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Book Lab Tests'),
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        centerTitle: true,
       ),
       body: Column(
         children: [

@@ -104,9 +104,10 @@ class _PatientBookingEntryState extends State<PatientBookingEntry> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Start Booking'),
+        title: const Text('Start Booking',),
         backgroundColor: Colors.blue.shade700,
         foregroundColor: Colors.white,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),

@@ -19,6 +19,7 @@ class _SettingState extends State<Setting> {
           style: TextStyle(color: Colors.blueAccent),
         ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.blueAccent),
       ),
       body: ListView(
         children: [

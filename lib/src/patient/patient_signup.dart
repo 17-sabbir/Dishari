@@ -30,14 +30,14 @@ class _PatientSignupPageState extends State<PatientSignupPage> {
   InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      prefixIcon: Icon(icon, color: kPrimaryColor.withOpacity(0.7)),
+      prefixIcon: Icon(icon, color: kPrimaryColor.withValues(alpha: 0.7)),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: kPrimaryColor.withOpacity(0.3)),
+        borderSide: BorderSide(color: kPrimaryColor.withValues(alpha: 0.3)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: kPrimaryColor.withOpacity(0.1)),
+        borderSide: BorderSide(color: kPrimaryColor.withValues(alpha: 0.1)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
@@ -193,7 +193,7 @@ class _PatientSignupPageState extends State<PatientSignupPage> {
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                            color: kPrimaryColor.withOpacity(0.7),
+                            color: kPrimaryColor.withValues(alpha: 0.7),
                           ),
                           onPressed: () {
                             setState(() {

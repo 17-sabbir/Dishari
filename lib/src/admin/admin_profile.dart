@@ -124,11 +124,10 @@ class _AdminProfileState extends State<AdminProfile> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Admin Profile & Settings", style: TextStyle(color: Colors.white)),
+        title: const Text("Admin Profile & Settings", style: TextStyle(color: Colors.blueAccent)),
         centerTitle: true,
-        backgroundColor: primaryColor,
+        backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

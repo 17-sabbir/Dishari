@@ -37,8 +37,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
           final shouldExit = await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text("Exit App?"),
-              content: const Text("Do you want to exit the application?"),
+              title: const Text("Exit App Confirmation"),
+              content: const Text("Do you want to exit?"),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),

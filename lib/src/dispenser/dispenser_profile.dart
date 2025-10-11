@@ -201,9 +201,9 @@ class _DispenserProfileState extends State<DispenserProfile> {
                       ElevatedButton.icon(
                         onPressed: _logout,
                         icon: const Icon(Icons.logout),
-                        label: const Text('Logout'),
+                        label: const Text('Logout',style: TextStyle(color: Colors.white),),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Colors.blueAccent,
                           minimumSize: const Size.fromHeight(48),
                         ),
                       ),
