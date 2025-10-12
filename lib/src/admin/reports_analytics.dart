@@ -108,9 +108,9 @@ class ReportsAnalytics extends StatelessWidget {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               children: [
-                _buildReportCard("Total Prescriptions (YTD)", totalPrescriptions, Icons.local_hospital_outlined, primaryColor),
-                _buildReportCard("Unique Patients (YTD)", 21000, Icons.person_search_outlined, Colors.orange),
-                _buildReportCard("Medicines Dispensed (YTD)", 10500, Icons.inventory_outlined, Colors.teal),
+                _buildReportCard("Total Prescriptions", totalPrescriptions, Icons.local_hospital_outlined, primaryColor),
+                _buildReportCard("Outside Patients", 21, Icons.person_search_outlined, Colors.orange),
+                _buildReportCard("Medicines Dispensed", 10500, Icons.inventory_outlined, Colors.teal),
                 _buildReportCard("Staff Active", 45, Icons.groups_outlined, Colors.blueGrey),
               ],
             ),

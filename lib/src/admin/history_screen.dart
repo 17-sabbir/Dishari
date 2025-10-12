@@ -10,7 +10,7 @@ class HistoryScreen extends StatelessWidget {
   final List<Map<String, dynamic>> historyItems = const [
     {
       "timestamp": "2025-09-01 09:21",
-      "user": "Dr. Amina Patel",
+      "user": "Dr. Barsha Islam",
       "action": "Updated prescription #45622",
       "type": "update"
     },

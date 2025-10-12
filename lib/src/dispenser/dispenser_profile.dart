@@ -10,8 +10,8 @@ class DispenserProfile extends StatefulWidget {
 }
 
 class _DispenserProfileState extends State<DispenserProfile> {
-  String name = 'Dispensor Name';
-  String email = 'dispensor@university.edu';
+  String name = 'Rakib Islam';
+  String email = 'Rakib@university.edu';
   File? _avatar;
 
   final ImagePicker _picker = ImagePicker();
@@ -180,7 +180,11 @@ class _DispenserProfileState extends State<DispenserProfile> {
                         icon: const Icon(Icons.lock),
                         label: const Text('Change Password'),
                         style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
+                          backgroundColor: Colors.orange,
+                          minimumSize: Size(
+                            MediaQuery.of(context).size.width * 0.4,
+                            48,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -194,8 +198,12 @@ class _DispenserProfileState extends State<DispenserProfile> {
                         label: const Text('Save Profile'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
-                          minimumSize: const Size.fromHeight(48),
+                          minimumSize: Size(
+                            MediaQuery.of(context).size.width * 0.4,
+                            48,
+                          ),
                         ),
+
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
@@ -204,7 +212,11 @@ class _DispenserProfileState extends State<DispenserProfile> {
                         label: const Text('Logout',style: TextStyle(color: Colors.white),),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
-                          minimumSize: const Size.fromHeight(48),
+                          minimumSize: Size(
+                            MediaQuery.of(context).size.width * 0.4,
+                            48,
+                          ),
+
                         ),
                       ),
                     ],

@@ -13,12 +13,12 @@ class _StaffRosteringState extends State<StaffRostering> with SingleTickerProvid
   bool _isCurrentWeek = true; // State to track which week is active
 
   // Dummy data: Roster for Current Week
-  List<Map<String, String>> _currentWeekRoster = [
-    {"day": "Monday", "role_1": "Dr. Patel (OPD AM)", "role_2": "Leo (Pharmacy)"},
-    {"day": "Tuesday", "role_1": "Dr. Kim (ER)", "role_2": "Sara (Lab)"},
-    {"day": "Wednesday", "role_1": "Dr. Roy (OPD PM)", "role_2": "Nina (Reception)"},
-    {"day": "Thursday", "role_1": "Dr. Chen (Surgery)", "role_2": "Arjun (Lab)"},
-    {"day": "Friday", "role_1": "Dr. Ahmed (ER)", "role_2": "Maya (Pharmacy)"},
+  final List<Map<String, String>> _currentWeekRoster = [
+    {"day": "Monday", "role_1": "Dr. Nasir", "role_2": "Rasid"},
+    {"day": "Tuesday", "role_1": "Dr. Habiba Sultana", "role_2": "Sara Islam"},
+    {"day": "Wednesday", "role_1": "Dr. Rakib", "role_2": "Mina (Reception)"},
+    {"day": "Thursday", "role_1": "Dr. Ezaz", "role_2": "Wakil"},
+    {"day": "Friday", "role_1": "Dr. Ahmed ", "role_2": "Maya"},
   ];
 
   // Dummy data: Roster for Next Week (Initially empty or copied from current)
@@ -32,8 +32,8 @@ class _StaffRosteringState extends State<StaffRostering> with SingleTickerProvid
 
   // Dummy Requests (SRS requirement: Approval for duty changes)
   List<Map<String, String>> requests = [
-    {"name": "Dr. Kim", "reason": "Family Emergency", "day": "Tuesday"},
-    {"name": "Sara", "reason": "Medical Leave", "day": "Tuesday"},
+    {"name": "Dr. Sara Islam", "reason": "Family Emergency", "day": "Tuesday"},
+    {"name": "Habiba Sultana", "reason": "Medical Leave", "day": "Tuesday"},
   ];
 
   @override

@@ -370,7 +370,7 @@ class _LabTestPanelState extends State<LabTestPanel> {
                                 },
                               ),
                             );
-                          }).toList(),
+                          })
                       ],
                     ),
                   ),
@@ -519,7 +519,7 @@ class _LabTestPanelState extends State<LabTestPanel> {
                                 ),
                               ),
                             );
-                          }).toList(),
+                          })
                       ],
                     ),
                   ),

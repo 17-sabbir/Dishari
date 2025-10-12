@@ -325,7 +325,7 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
 
             // Change Password Button
             SizedBox(
-              width:MediaQuery.of(context).size.width * 0.6,
+              width:MediaQuery.of(context).size.width * 0.4,
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: _showChangePasswordDialog,
@@ -346,7 +346,7 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
 
             // Logout Button
             SizedBox(
-              width:MediaQuery.of(context).size.width * 0.6,
+              width:MediaQuery.of(context).size.width * 0.4,
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: _logout,
