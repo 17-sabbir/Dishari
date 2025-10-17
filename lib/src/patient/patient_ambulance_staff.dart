@@ -11,7 +11,7 @@ class PatientAmbulanceStaff extends StatefulWidget {
 class _PatientAmbulanceStaffState extends State<PatientAmbulanceStaff> {
   final Color kPrimaryColor = const Color(0xFF00796B); // Deep Teal
 
-  // SRS Compliance: Simulated database for ambulance and staff info
+  // Simulated database for ambulance and staff info
   final String ambulanceContact1 = "+৮৮-০১৩৩৩১৯৯০৮৫ || +88-01333199085";
   final String ambulanceContact2 = "+৮৮-০১৭৭৬৫০৩৪৬৯ || +88-01776503469";
 
@@ -43,7 +43,7 @@ class _PatientAmbulanceStaffState extends State<PatientAmbulanceStaff> {
     },
   ];
 
-  // SRS Compliance: Staff Rating Dialog
+  // Staff Rating Dialog
   void _showRateStaffDialog(String staffName, String staffRole) {
     showDialog(
       context: context,
@@ -51,25 +51,6 @@ class _PatientAmbulanceStaffState extends State<PatientAmbulanceStaff> {
         staffName: staffName,
         staffRole: staffRole,
         kPrimaryColor: kPrimaryColor,
-      ),
-    );
-  }
-
-  // Utility widget for Contact Info
-  Widget _buildContactTile(IconData icon, String title, String subtitle, Color color) {
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.only(bottom: 10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        leading: Icon(icon, color: color, size: 30),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 14)),
-        trailing: Icon(Icons.call, color: color),
-        onTap: () {
-          // Dummy Call Action
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Calling $title... (Dummy Action)")));
-        },
       ),
     );
   }
@@ -101,17 +82,40 @@ class _PatientAmbulanceStaffState extends State<PatientAmbulanceStaff> {
             ),
             const Divider(thickness: 2, color: Colors.red),
 
-            _buildContactTile(
-                Icons.local_hospital_outlined,
-                "Ambulance Line 1",
-                ambulanceContact1,
-                Colors.red.shade700
+            // Ambulance Line 1
+            Card(
+              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 10),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: ListTile(
+                leading: Icon(Icons.local_hospital_outlined, color: Colors.red.shade700, size: 30),
+                title: const Text("Ambulance Line 1", style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(ambulanceContact1, style: const TextStyle(fontSize: 14)),
+                trailing: Icon(Icons.call, color: Colors.red.shade700),
+                onTap: (){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Calling Ambulance Line 1: $ambulanceContact1")),
+                  );
+                }
+              ),
             ),
-            _buildContactTile(
-                Icons.local_hospital_outlined,
-                "Ambulance Line 2 (Backup)",
-                ambulanceContact2,
-                Colors.red.shade700
+
+            // Ambulance Line 2
+            Card(
+              elevation: 2,
+              margin: const EdgeInsets.only(bottom: 10),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: ListTile(
+                leading: Icon(Icons.local_hospital_outlined, color: Colors.red.shade700, size: 30),
+                title: const Text("Ambulance Line 2 (Backup)", style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(ambulanceContact2, style: const TextStyle(fontSize: 14)),
+                trailing: Icon(Icons.call, color: Colors.red.shade700),
+                onTap: (){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Calling Ambulance Line 2: $ambulanceContact1")),
+                  );
+              }
+              ),
             ),
 
             const SizedBox(height: 30),
@@ -146,10 +150,7 @@ class _PatientAmbulanceStaffState extends State<PatientAmbulanceStaff> {
                     onPressed: () => _showRateStaffDialog(staff["name"]!, staff["designation"]!),
                   ),
                   isThreeLine: true,
-                  onTap: () {
-                    // Dummy Call Action
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Calling ${staff["name"]}... (Dummy Action)")));
-                  },
+                  onTap: null,
                 ),
               );
             }).toList(),
@@ -162,7 +163,7 @@ class _PatientAmbulanceStaffState extends State<PatientAmbulanceStaff> {
   }
 }
 
-// Separate Widget for Rating Dialog (Improved UI)
+// Rating Dialog
 class RateStaffDialog extends StatefulWidget {
   final String staffName;
   final String staffRole;
@@ -202,7 +203,6 @@ class _RateStaffDialogState extends State<RateStaffDialog> {
             Text("How would you rate ${widget.staffName} (${widget.staffRole})?"),
             const SizedBox(height: 20),
 
-            // Star Rating (Visually improved)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
@@ -224,7 +224,6 @@ class _RateStaffDialogState extends State<RateStaffDialog> {
 
             const SizedBox(height: 20),
 
-            // Feedback Text Field
             TextField(
               controller: _feedbackController,
               decoration: InputDecoration(
@@ -239,12 +238,10 @@ class _RateStaffDialogState extends State<RateStaffDialog> {
             ),
             const SizedBox(height: 20),
 
-            // Submit Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // SRS Compliance: Save rating to database
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Thank you for your $_rating star rating for ${widget.staffName}!")),
                   );

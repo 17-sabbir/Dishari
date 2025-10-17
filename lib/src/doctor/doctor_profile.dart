@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:spl2/src/doctor/test_reports_view.dart';
+import 'package:spl2/src/change_request_rostering.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -75,6 +77,44 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void _showNotificationsList() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text("Notifications", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Expanded(
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.upload_file, color: Colors.green),
+                    title: Text("New Test Report Uploaded"),
+                    subtitle: Text("Patient: Md Sabbir Ahamed uploaded Blood Test report"),
+                    trailing: IconButton(
+                      icon: Icon(Icons.visibility),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TestReportsViewPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _changePassword() {
     showDialog(
       context: context,
@@ -127,11 +167,21 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // Navigate to rostering system
+  void _navigateToRostering() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeRequestRostering(
+          userRole: 'doctor',
+          userName: _nameController.text,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    double responsiveWidth(double w) => size.width * w / 375;
-
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -142,17 +192,14 @@ class _ProfilePageState extends State<ProfilePage> {
           IconButton(
             icon: const Icon(Icons.notification_add, color: Colors.red),
             onPressed: (){
-              //list of notifications
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("No new notifications")),
-              );
+              _showNotificationsList();
             },
           ),
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(responsiveWidth(20)),
+          padding: const EdgeInsets.all(25), // Changed to 25 padding for entire page
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -509,6 +556,32 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 25),
+
+              // Rostering Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _navigateToRostering,
+                  icon: const Icon(Icons.schedule, color: Colors.white),
+                  label: const Text(
+                    "My Schedule",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade700,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                ),
               ),
             ],
           ),

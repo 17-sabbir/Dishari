@@ -125,7 +125,7 @@ class _InventoryManagementState extends State<InventoryManagement> {
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Text("ID: ${batch['batchId']} | Stock: ${batch['stock']} | Expires: ${DateFormat('yy-MM').format(batch['expiry'])}"),
                       );
-                    }).toList(),
+                    }),
 
                     const Divider(),
                     const Text("Add New Batch:", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -182,22 +182,28 @@ class _InventoryManagementState extends State<InventoryManagement> {
                             _errorText = "Enter a valid Batch ID and positive Quantity.";
                           });
                           return;
-                        }
-
-                        // Add the new batch
+                        }else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  "${product['name']} - Batch $batchId added with $quantity ${product['unit']}."
+                              ),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        };
+                        //Add the new batch
                         setState(() {
-                          (product['batches'] as List<Map<String, dynamic>>).add({
+                          final batches = List<Map<String, dynamic>>.from(product['batches'] ?? []);
+                          batches.add({
                             "batchId": batchId,
                             "stock": quantity,
                             "expiry": _selectedExpiryDate,
                           });
+                          product['batches'] = batches; // Update product map with new mutable list
                         });
 
-                        Navigator.pop(context); // Close the dialog
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("${product['name']} - Batch $batchId added with $quantity ${product['unit']}."))
-                        );
                       },
                       icon: const Icon(Icons.add_circle, color: Colors.white),
                       label: const Text("Add New Batch", style: TextStyle(color: Colors.white)),
@@ -220,9 +226,136 @@ class _InventoryManagementState extends State<InventoryManagement> {
     });
   }
 
-  void _showAddMedicineDialog() async {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Add Medicine Dialog functionality is pending implementation.")));
+  void _showAddMedicineDialog() {
+    final TextEditingController medicineIdController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController unitController = TextEditingController();
+    final TextEditingController minStockController = TextEditingController(text: "10");
+    final TextEditingController typeController = TextEditingController();
+
+    bool _isIdValid = true;
+    bool _isNameValid = true;
+    bool _isUnitValid = true;
+    bool _isMinStockValid = true;
+    bool _isTypeValid = true;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              title: const Text("Add New Medicine"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: medicineIdController,
+                      decoration: InputDecoration(
+                        labelText: "Medicine ID",
+                        errorText: _isIdValid ? null : "Required",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        labelText: "Medicine Name",
+                        errorText: _isNameValid ? null : "Required",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: unitController,
+                      decoration: InputDecoration(
+                        labelText: "Unit (e.g. tablet,capsul)",
+                        errorText: _isUnitValid ? null : "Required",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: minStockController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Minimum Stock",
+                        errorText: _isMinStockValid ? null : "Required",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: typeController,
+                      decoration: InputDecoration(
+                        labelText: "Type (e.g. Antibiotic, Painkiller)",
+                        errorText: _isTypeValid ? null : "Required",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    bool isValid = true;
+
+                    if (medicineIdController.text.isEmpty) {
+                      isValid = false;
+                      setStateDialog(() => _isIdValid = false);
+                    } else {
+                      setStateDialog(() => _isIdValid = true);
+                    }
+
+                    if (nameController.text.isEmpty) {
+                      isValid = false;
+                      setStateDialog(() => _isNameValid = false);
+                    } else {
+                      setStateDialog(() => _isNameValid = true);
+                    }
+
+                    if (unitController.text.isEmpty) {
+                      isValid = false;
+                      setStateDialog(() => _isUnitValid = false);
+                    } else {
+                      setStateDialog(() => _isUnitValid = true);
+                    }
+
+                    if (minStockController.text.isEmpty) {
+                      isValid = false;
+                      setStateDialog(() => _isMinStockValid = false);
+                    } else {
+                      setStateDialog(() => _isMinStockValid = true);
+                    }
+
+                    if (typeController.text.isEmpty) {
+                      isValid = false;
+                      setStateDialog(() => _isTypeValid = false);
+                    } else {
+                      setStateDialog(() => _isTypeValid = true);
+                    }
+
+                    if (!isValid) return;
+
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Medicine added successfully")),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00796B)),
+                  child: const Text("Add", style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
+
 
 
   @override
@@ -264,7 +397,7 @@ class _InventoryManagementState extends State<InventoryManagement> {
                           onTap: () => _viewMedicine(product),
                         ),
                       );
-                    }).toList(),
+                    }),
                     const Divider(height: 30),
                   ],
                 ),

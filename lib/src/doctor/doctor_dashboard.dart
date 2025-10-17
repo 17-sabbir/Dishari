@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'doctor_profile.dart';
-import 'setting.dart';
-import 'patient_records.dart';
-import 'emergency_cases.dart';
-
+import 'package:spl2/src/doctor/doctor_profile.dart';
+import 'package:spl2/src/doctor/setting.dart';
+import 'package:spl2/src/doctor/patient_records.dart';
+import 'package:spl2/src/doctor/emergency_cases.dart';
+import 'package:spl2/src/doctor/test_reports_view.dart';
 class DoctorDashboard extends StatefulWidget {
   const DoctorDashboard({super.key});
 
@@ -21,6 +21,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
     const ProfilePage(),
     const PatientRecordsPage(),
     const EmergencyCasesPage(),
+    const TestReportsViewPage(),
     const Setting(),
   ];
 
@@ -82,6 +83,10 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
             BottomNavigationBarItem(
               icon: Icon(Icons.emergency),
               label: "Emergency",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.upload_file),
+              label: "Review Reports",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),

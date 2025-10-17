@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import '../change_request_rostering.dart';
+
 class LabTesterProfile extends StatefulWidget {
   const LabTesterProfile({super.key});
 
@@ -146,13 +148,40 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
   }
 
   void _logout() {
-    // Implement your logout logic here
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Logged out successfully"),
-        backgroundColor: Colors.blue,
-      ),
-    );
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // close dialog
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Logged out successfully"),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/', // তোমার HomePage route name
+                      (route) => false, // আগের সব route মুছে দেয়
+                );
+              },
+              child: const Text(
+                "Logout",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        ),
+      );
   }
 
   @override
@@ -322,10 +351,37 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
               ),
             ),
             const SizedBox(height: 24),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: 50,
+              child: ElevatedButton.icon(
+                onPressed: (){ Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangeRequestRostering(
+                      userRole: 'lab_staff',
+                      userName: name, // or get from actual user data
+                    ),
+                  ),
+                );},
+                icon: const Icon(Icons.schedule, color: Colors.white),
+                label: const Text(
+                  "My Schedule",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green.shade700, // Green for lab staff
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
 
             // Change Password Button
             SizedBox(
-              width:MediaQuery.of(context).size.width * 0.4,
+              width:MediaQuery.of(context).size.width * 0.5,
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: _showChangePasswordDialog,
@@ -346,7 +402,7 @@ class _LabTesterProfileState extends State<LabTesterProfile> {
 
             // Logout Button
             SizedBox(
-              width:MediaQuery.of(context).size.width * 0.4,
+              width:MediaQuery.of(context).size.width * 0.5,
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: _logout,

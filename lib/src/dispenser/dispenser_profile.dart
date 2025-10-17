@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:spl2/src//change_request_rostering.dart';
+
 class DispenserProfile extends StatefulWidget {
   const DispenserProfile({super.key});
 
@@ -62,8 +64,40 @@ class _DispenserProfileState extends State<DispenserProfile> {
   }
 
   void _logout() {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Logged out (dummy)')));
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // close dialog
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Logged out successfully"),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/', // তোমার HomePage route name
+                      (route) => false, // আগের সব route মুছে দেয়
+                );
+              },
+              child: const Text(
+                "Logout",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        ),
+      );
   }
 
   @override
@@ -190,12 +224,18 @@ class _DispenserProfileState extends State<DispenserProfile> {
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Profile saved (dummy)')));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChangeRequestRostering(
+                                userRole: 'dispenser',
+                                userName: name, // or get from actual user data
+                              ),
+                            ),
+                          );
                         },
                         icon: const Icon(Icons.save),
-                        label: const Text('Save Profile'),
+                        label: const Text('My Schedule'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           minimumSize: Size(
